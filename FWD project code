@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TourEase</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+margin:0;
+background:#eef2f7;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(90deg,#1a3cff,#3c6cff);
+color:white;
+padding:25px;
+}
+
+header h1{
+margin:0;
+font-size:34px;
+}
+
+header p{
+margin:5px 0;
+opacity:0.9;
+}
+
+/* SEARCH */
+
+.search-box{
+padding:25px;
+text-align:center;
+}
+
+.search-box input{
+width:60%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.search-box button{
+padding:12px 18px;
+border:none;
+border-radius:8px;
+background:#1a3cff;
+color:white;
+cursor:pointer;
+}
+
+/* GRID */
+
+.places-container{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:20px;
+padding:20px;
+}
+
+/* PLACE CARD */
+
+.place{
+background:white;
+padding:18px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.place:hover{
+transform:translateY(-5px);
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+.place h3{
+margin-top:0;
+color:#1a3cff;
+}
+
+/* SURVEY CARD */
+
+.card{
+width:420px;
+margin:40px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+.card h2{
+margin-top:0;
+}
+
+/* BUTTON GRID */
+
+.crowd-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.crowd-buttons button{
+padding:12px;
+border-radius:8px;
+border:none;
+background:#eef2ff;
+cursor:pointer;
+transition:0.2s;
+}
+
+.crowd-buttons button:hover{
+background:#1a3cff;
+color:white;
+}
+
+/* SELECT */
+
+select{
+width:100%;
+padding:10px;
+border-radius:8px;
+margin-top:6px;
+}
+
+/* MAIN BUTTON */
+
+.scan-btn{
+margin-top:20px;
+padding:12px;
+width:100%;
+border:none;
+background:#1a3cff;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* FOOTER */
+
+footer{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+text-align:center;
+padding:12px;
+}
+
+footer a{
+margin:0 20px;
+cursor:pointer;
+font-weight:600;
+color:#1a3cff;
+}
+
+/* PAGES */
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>TourEase</h1>
+<p>Explore wisely, travel smartly</p>
+</header>
+
+
+<!-- HOME -->
+
+<div id="home" class="page active">
+
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Search Tourist Places">
+<button onclick="searchPlaces()">Search</button>
+</div>
+
+<div class="places-container" id="placesContainer"></div>
+
+</div>
+
+
+<!-- SURVEY -->
+
+<div id="survey" class="page">
+
+<div class="card">
+
+<h2>Quick Crowd Survey</h2>
+
+<label>Location</label>
+
+<select id="location"></select>
+
+<br><br>
+
+<label>Crowd Level</label>
+
+<div class="crowd-buttons">
+
+<button onclick="selectCrowd('Low')">Low</button>
+<button onclick="selectCrowd('Moderate')">Moderate</button>
+<button onclick="selectCrowd('High')">High</button>
+<button onclick="selectCrowd('Very Crowded')">Very Crowded</button>
+
+</div>
+
+<br>
+
+<label>Wait Time</label>
+
+<select id="waitTime">
+<option>5 mins</option>
+<option>10 mins</option>
+<option>20 mins</option>
+<option>30+ mins</option>
+</select>
+
+<button class="scan-btn" onclick="submitSurvey()">Submit Survey</button>
+
+</div>
+
+</div>
+
+
+<!-- QR -->
+
+<div id="qr" class="page">
+
+<div class="card">
+
+<h2>Scan QR Code</h2>
+
+<select id="language">
+<option>English</option>
+<option>Hindi</option>
+<option>Telugu</option>
+</select>
+
+<button class="scan-btn" onclick="startScan()">Start Scanning</button>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('survey')">Survey</a>
+<a onclick="showPage('qr')">QR Scan</a>
+
+</footer>
+
+
+<script>
+
+/* TOURIST PLACES */
+
+let places=[
+
+"Taj Mahal",
+"Red Fort",
+"India Gate",
+"Charminar",
+"Gateway of India",
+"Hawa Mahal",
+"Qutub Minar",
+"Mysore Palace",
+"Golden Temple",
+"Meenakshi Temple",
+"Victoria Memorial",
+"Lotus Temple",
+"Ajanta Caves",
+"Ellora Caves",
+"Sun Temple Konark",
+"Amer Fort",
+"Jaisalmer Fort",
+"Rishikesh",
+"Varanasi Ghats",
+"Kedarnath Temple"
+
+]
+
+
+/* CREATE PLACE CARDS */
+
+function loadPlaces(){
+
+let container=document.getElementById("placesContainer")
+let dropdown=document.getElementById("location")
+
+container.innerHTML=""
+dropdown.innerHTML=""
+
+places.forEach(place=>{
+
+let data=JSON.parse(localStorage.getItem(place))
+
+let crowd="Moderate"
+let wait="10 mins"
+let time="Recently"
+
+if(data){
+crowd=data.crowd
+wait=data.wait
+time=data.time
+}
+
+container.innerHTML+=`
+
+<div class="place">
+<h3>${place}</h3>
+<p>Crowd: ${crowd}</p>
+<p>Wait Time: ${wait}</p>
+<p>Updated: ${time}</p>
+</div>
+
+`
+
+dropdown.innerHTML+=`<option>${place}</option>`
+
+})
+
+}
+
+
+/* SEARCH */
+
+function searchPlaces(){
+
+let input=document.getElementById("searchInput").value.toLowerCase()
+let cards=document.querySelectorAll(".place")
+
+cards.forEach(card=>{
+
+let name=card.querySelector("h3").innerText.toLowerCase()
+
+card.style.display=name.includes(input)?"block":"none"
+
+})
+
+}
+
+
+/* PAGE SWITCH */
+
+function showPage(page){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+document.getElementById(page).classList.add("active")
+
+loadPlaces()
+
+}
+
+
+/* SURVEY */
+
+let crowdLevel=""
+
+function selectCrowd(level){
+crowdLevel=level
+}
+
+
+function submitSurvey(){
+
+let location=document.getElementById("location").value
+let wait=document.getElementById("waitTime").value
+
+let data={
+crowd:crowdLevel,
+wait:wait,
+time:new Date().toLocaleTimeString()
+}
+
+localStorage.setItem(location,JSON.stringify(data))
+
+alert("Survey Submitted!")
+
+loadPlaces()
+
+}
+
+
+/* QR */
+
+function startScan(){
+
+let lang=document.getElementById("language").value
+alert("Starting QR scan in "+lang)
+
+}
+
+
+/* INITIAL LOAD */
+
+loadPlaces()
+
+</script>
+
+</body>
+</html>
+```
