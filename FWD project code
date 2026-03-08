@@ -15,7 +15,7 @@ margin:0;
 background:#eef2f7;
 }
 
-/* HEADER */
+
 
 header{
 background:linear-gradient(90deg,#1a3cff,#3c6cff);
@@ -33,7 +33,7 @@ margin:5px 0;
 opacity:0.9;
 }
 
-/* SEARCH */
+
 
 .search-box{
 padding:25px;
@@ -56,7 +56,6 @@ color:white;
 cursor:pointer;
 }
 
-/* GRID */
 
 .places-container{
 display:grid;
@@ -65,7 +64,7 @@ gap:20px;
 padding:20px;
 }
 
-/* PLACE CARD */
+
 
 .place{
 background:white;
@@ -85,7 +84,6 @@ margin-top:0;
 color:#1a3cff;
 }
 
-/* SURVEY CARD */
 
 .card{
 width:420px;
@@ -100,7 +98,7 @@ box-shadow:0 6px 20px rgba(0,0,0,0.15);
 margin-top:0;
 }
 
-/* BUTTON GRID */
+
 
 .crowd-buttons{
 display:grid;
@@ -122,7 +120,6 @@ background:#1a3cff;
 color:white;
 }
 
-/* SELECT */
 
 select{
 width:100%;
@@ -131,7 +128,7 @@ border-radius:8px;
 margin-top:6px;
 }
 
-/* MAIN BUTTON */
+
 
 .scan-btn{
 margin-top:20px;
@@ -144,7 +141,7 @@ border-radius:8px;
 cursor:pointer;
 }
 
-/* FOOTER */
+
 
 footer{
 position:fixed;
@@ -163,7 +160,7 @@ font-weight:600;
 color:#1a3cff;
 }
 
-/* PAGES */
+
 
 .page{
 display:none;
@@ -185,7 +182,7 @@ display:block;
 </header>
 
 
-<!-- HOME -->
+
 
 <div id="home" class="page active">
 
@@ -199,7 +196,7 @@ display:block;
 </div>
 
 
-<!-- SURVEY -->
+
 
 <div id="survey" class="page">
 
@@ -242,7 +239,7 @@ display:block;
 </div>
 
 
-<!-- QR -->
+
 
 <div id="qr" class="page">
 
@@ -274,7 +271,7 @@ display:block;
 
 <script>
 
-/* TOURIST PLACES */
+
 
 let places=[
 
@@ -302,7 +299,6 @@ let places=[
 ]
 
 
-/* CREATE PLACE CARDS */
 
 function loadPlaces(){
 
@@ -344,7 +340,7 @@ dropdown.innerHTML+=`<option>${place}</option>`
 }
 
 
-/* SEARCH */
+
 
 function searchPlaces(){
 
@@ -362,7 +358,7 @@ card.style.display=name.includes(input)?"block":"none"
 }
 
 
-/* PAGE SWITCH */
+
 
 function showPage(page){
 
@@ -374,7 +370,7 @@ loadPlaces()
 }
 
 
-/* SURVEY */
+
 
 let crowdLevel=""
 
@@ -403,7 +399,7 @@ loadPlaces()
 }
 
 
-/* QR */
+
 
 function startScan(){
 
@@ -413,7 +409,6 @@ alert("Starting QR scan in "+lang)
 }
 
 
-/* INITIAL LOAD */
 
 loadPlaces()
 
@@ -421,4 +416,3 @@ loadPlaces()
 
 </body>
 </html>
-```
